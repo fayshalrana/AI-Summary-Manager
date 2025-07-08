@@ -1,0 +1,14 @@
+import React from 'react';
+
+const WelcomeHeader: React.FC = () => (
+  <div className="text-center my-8">
+    <h1 className="text-4xl font-bold mb-2">
+      Welcome to <span className="text-purple-600">SmartBrief</span>
+    </h1>
+    <p className="text-lg text-gray-600">
+      Transform lengthy content into concise, actionable summaries with AI
+    </p>
+  </div>
+);
+
+export default WelcomeHeader; 
