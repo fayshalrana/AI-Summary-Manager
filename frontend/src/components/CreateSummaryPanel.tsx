@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { createSummaryFromText, createSummaryFromFile } from '../store/slices/summarySlice';
 
 const TABS = [
   { label: 'Text Input', value: 'text' },
@@ -9,12 +11,25 @@ const CreateSummaryPanel: React.FC = () => {
   const [activeTab, setActiveTab] = useState('text');
   const [prompt, setPrompt] = useState('');
   const [content, setContent] = useState('');
+  const [file, setFile] = useState<File | null>(null);
+
+  const dispatch = useAppDispatch();
+  const { loading, error } = useAppSelector(state => state.summary);
 
   const handleTabClick = (tab: string) => setActiveTab(tab);
-  const handleGenerate = (e: React.FormEvent) => {
+
+  const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Placeholder: trigger summary generation
-    alert('Summary generated!');
+    if (activeTab === 'text') {
+      if (!content.trim()) return;
+      await dispatch(createSummaryFromText({ text: content, prompt: prompt.trim() || undefined, provider: 'gemini' }));
+      setContent('');
+      setPrompt('');
+    } else if (activeTab === 'file' && file) {
+      await dispatch(createSummaryFromFile({ file, prompt: prompt.trim() || undefined, provider: 'gemini' }));
+      setFile(null);
+      setPrompt('');
+    }
   };
 
   return (
@@ -30,6 +45,9 @@ const CreateSummaryPanel: React.FC = () => {
           </button>
         ))}
       </div>
+      {error && (
+        <div className="mb-2 p-2 bg-red-100 border border-red-400 text-red-700 rounded text-sm">{error}</div>
+      )}
       <form onSubmit={handleGenerate} className="flex flex-col gap-4">
         <input
           type="text"
@@ -50,15 +68,15 @@ const CreateSummaryPanel: React.FC = () => {
           <input
             type="file"
             className="w-full p-2 rounded border border-gray-300 bg-gray-50 text-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-400"
-            // Placeholder: handle file upload
+            onChange={e => setFile(e.target.files?.[0] || null)}
           />
         )}
         <button
           type="submit"
           className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-purple-400 disabled:opacity-50"
-          disabled={activeTab === 'text' ? !content.trim() : false}
+          disabled={loading || (activeTab === 'text' ? !content.trim() : !file)}
         >
-          Generate Summary (1 Credit)
+          {loading ? 'Generating...' : 'Generate Summary (1 Credit)'}
         </button>
       </form>
     </div>
