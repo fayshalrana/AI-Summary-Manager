@@ -15,7 +15,7 @@ const DashboardLayout: React.FC = () => {
 
   return (
     <div className="min-h-screen w-screen bg-gradient-to-b from-purple-100 to-blue-50 flex flex-col">
-      <Navbar credits={creditsRemaining} />
+      <Navbar />
       <div className="max-w-screen mx-auto w-full px-4 flex-1">
         <WelcomeHeader />
         <StatsGrid
