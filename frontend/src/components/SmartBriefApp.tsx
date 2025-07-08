@@ -7,6 +7,7 @@ import AuthForm from './AuthForm';
 import SummaryHistory from './SummaryHistory';
 import CreateSummary from './CreateSummary';
 import LoadingSpinner from './LoadingSpinner';
+import ConnectionTest from './ConnectionTest';
 
 const SmartBriefApp = () => {
   const dispatch = useAppDispatch();
@@ -17,7 +18,7 @@ const SmartBriefApp = () => {
     // Check if user is authenticated on app load
     if (isAuthenticated) {
       dispatch(getCurrentUser());
-      dispatch(fetchSummaries());
+      dispatch(fetchSummaries({}));
       dispatch(fetchAIModels());
       dispatch(fetchFileTypes());
     }
@@ -40,7 +41,10 @@ const SmartBriefApp = () => {
               <h1 className="text-3xl font-bold text-gray-900 mb-2">SmartBrief</h1>
               <p className="text-gray-600">AI-Powered Text Summarization</p>
             </div>
-            <AuthForm />
+            <ConnectionTest />
+            <div className="mt-8">
+              <AuthForm />
+            </div>
           </div>
         </div>
       </div>

@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { fetchSummaries, deleteSummary, setCurrentSummary } from '../store/slices/summarySlice';
-import { Summary } from '../store/slices/summarySlice';
-import LoadingSpinner from './LoadingSpinner';
+import type { Summary } from '../store/slices/summarySlice';
+import LoadingSpinner from "./LoadingSpinner.tsx";
 import SummaryDetail from './SummaryDetail';
 
 const SummaryHistory = () => {

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { updateSummary, deleteSummary } from '../store/slices/summarySlice';
-import { Summary } from '../store/slices/summarySlice';
+import type { Summary } from '../store/slices/summarySlice';
 import LoadingSpinner from './LoadingSpinner';
 
 interface SummaryDetailProps {
