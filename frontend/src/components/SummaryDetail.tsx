@@ -32,14 +32,13 @@ const SummaryDetail = ({ summary, onClose, canEdit, canDelete }: SummaryDetailPr
   };
 
   const handleUpdate = async () => {
-    await dispatch(updateSummary({
+    const result = await dispatch(updateSummary({
       summaryId: summary._id,
       prompt: editData.prompt,
       provider: editData.provider as 'openai' | 'gemini',
       model: editData.model
     }));
-    
-    if (!error) {
+    if (result.meta && result.meta.requestStatus === 'fulfilled') {
       setIsEditing(false);
     }
   };
@@ -99,30 +98,30 @@ const SummaryDetail = ({ summary, onClose, canEdit, canDelete }: SummaryDetailPr
             <div className="bg-gray-50 p-4 rounded-lg">
               <h3 className="font-semibold text-gray-900 mb-2">Statistics</h3>
               <div className="space-y-1 text-sm">
-                <p><span className="font-medium">Original:</span> {summary.wordCount.original} words</p>
-                <p><span className="font-medium">Summary:</span> {summary.wordCount.summary} words</p>
+                <p className='text-black'><span className="font-medium">Original:</span> {summary.wordCount.original} words</p>
+                <p className='text-black'><span className="font-medium">Summary:</span> {summary.wordCount.summary} words</p>
                 {summary.compressionRatio && (
-                  <p><span className="font-medium">Compression:</span> {summary.compressionRatio}%</p>
+                  <p className='text-black'><span className="font-medium">Compression:</span> {summary.compressionRatio}%</p>
                 )}
-                <p><span className="font-medium">Credits Used:</span> {summary.creditsUsed}</p>
+                <p className='text-black'><span className="font-medium">Credits Used:</span> {summary.creditsUsed}</p>
               </div>
             </div>
 
             <div className="bg-gray-50 p-4 rounded-lg">
               <h3 className="font-semibold text-gray-900 mb-2">AI Information</h3>
               <div className="space-y-1 text-sm">
-                <p><span className="font-medium">Provider:</span> {summary.aiProvider}</p>
-                <p><span className="font-medium">Model:</span> {summary.model}</p>
-                <p><span className="font-medium">Processing Time:</span> {formatProcessingTime(summary.processingTime)}</p>
-                <p><span className="font-medium">Status:</span> <span className="capitalize">{summary.status}</span></p>
+                <p className='text-black'><span className="font-medium">Provider:</span> {summary.aiProvider}</p>
+                <p className='text-black'><span className="font-medium">Model:</span> {summary.model}</p>
+                <p className='text-black'><span className="font-medium">Processing Time:</span> {formatProcessingTime(summary.processingTime)}</p>
+                <p className='text-black'><span className="font-medium">Status:</span> <span className="capitalize">{summary.status}</span></p>
               </div>
             </div>
 
             <div className="bg-gray-50 p-4 rounded-lg">
               <h3 className="font-semibold text-gray-900 mb-2">Timestamps</h3>
               <div className="space-y-1 text-sm">
-                <p><span className="font-medium">Created:</span> {formatDate(summary.createdAt)}</p>
-                <p><span className="font-medium">Updated:</span> {formatDate(summary.updatedAt)}</p>
+                <p className='text-black'><span className="font-medium">Created:</span> {formatDate(summary.createdAt)}</p>
+                <p className='text-black'><span className="font-medium">Updated:</span> {formatDate(summary.updatedAt)}</p>
               </div>
             </div>
           </div>
@@ -152,7 +151,7 @@ const SummaryDetail = ({ summary, onClose, canEdit, canDelete }: SummaryDetailPr
                 value={editData.prompt}
                 onChange={handleInputChange}
                 rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
               />
             ) : (
               <div className="bg-gray-50 p-4 rounded-lg">

@@ -60,7 +60,8 @@ const AuthForm = () => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
+    <div className="w-screen h-screen flex items-center justify-center bg-gray-100">
+     <div className="bg-white rounded-lg shadow-md p-6">
       <div className="text-center mb-6">
         <h2 className="text-2xl font-bold text-gray-900">
           {isLogin ? 'Sign In' : 'Create Account'}
@@ -89,7 +90,7 @@ const AuthForm = () => {
               value={formData.name}
               onChange={handleInputChange}
               required={!isLogin}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
               placeholder="Enter your full name"
             />
           </div>
@@ -106,7 +107,7 @@ const AuthForm = () => {
             value={formData.email}
             onChange={handleInputChange}
             required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
             placeholder="Enter your email"
           />
         </div>
@@ -122,7 +123,7 @@ const AuthForm = () => {
             value={formData.password}
             onChange={handleInputChange}
             required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black text-black"
             placeholder="Enter your password"
           />
         </div>
@@ -139,7 +140,7 @@ const AuthForm = () => {
               value={formData.confirmPassword}
               onChange={handleInputChange}
               required={!isLogin}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
               placeholder="Confirm your password"
             />
             {formData.password && formData.confirmPassword && formData.password !== formData.confirmPassword && (
@@ -177,6 +178,7 @@ const AuthForm = () => {
           </p>
         </div>
       )}
+    </div>
     </div>
   );
 };

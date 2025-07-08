@@ -16,6 +16,7 @@ const SummaryHistory = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
+    // Fetch all summaries for all users, regardless of role
     dispatch(fetchSummaries({ page: currentPage, search: searchTerm }));
   }, [dispatch, currentPage, searchTerm]);
 
@@ -38,12 +39,16 @@ const SummaryHistory = () => {
   const canEditSummary = (summary: Summary) => {
     if (!user) return false;
     if (user.role === 'admin' || user.role === 'editor') return true;
+    if (user.role === 'reviewer') return false;
+    // user.role === 'user'
     return summary.userId === user.id || (typeof summary.userId === 'object' && summary.userId._id === user.id);
   };
 
   const canDeleteSummary = (summary: Summary) => {
     if (!user) return false;
     if (user.role === 'admin' || user.role === 'editor') return true;
+    if (user.role === 'reviewer') return false;
+    // user.role === 'user'
     return summary.userId === user.id || (typeof summary.userId === 'object' && summary.userId._id === user.id);
   };
 
