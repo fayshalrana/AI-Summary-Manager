@@ -26,7 +26,9 @@ const StatsGrid: React.FC<StatsGridProps> = ({ totalSummaries, creditsRemaining,
           className={`bg-white rounded-lg shadow p-6 flex flex-col items-center border-t-4 ${stat.color}`}
         >
           <span className="text-gray-500 text-sm mb-1">{stat.label}</span>
-          <span className="text-2xl font-bold text-gray-800">{stat.value}</span>
+          <span className="text-2xl font-bold text-gray-800">
+            {stat.label === 'Credits Remaining' && stat.value === Infinity ? 'Unlimited' : stat.value}
+          </span>
         </div>
       ))}
     </div>

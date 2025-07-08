@@ -75,7 +75,7 @@ class AIService {
    * @param {string} model - Gemini model to use
    * @returns {Promise<Object>} - Summary result
    */
-  async generateGeminiSummary(text, prompt = null, model = 'gemini-pro') {
+  async generateGeminiSummary(text, prompt = null, model = 'gemini-1.5-flash-latest') {
     try {
       if (!this.geminiApiKey) {
         throw new Error('Gemini API key not configured');
@@ -151,7 +151,7 @@ class AIService {
         const openaiModel = model || 'gpt-3.5-turbo';
         result = await this.generateOpenAISummary(text, prompt, openaiModel);
       } else if (provider === 'gemini') {
-        const geminiModel = model || 'gemini-pro';
+        const geminiModel = model || 'gemini-1.5-flash-latest';
         result = await this.generateGeminiSummary(text, prompt, geminiModel);
       } else {
         throw new Error(`Unsupported AI provider: ${provider}`);

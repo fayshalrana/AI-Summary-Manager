@@ -7,7 +7,7 @@ const CreditManagementPanel: React.FC = () => {
 
   return (
     <div className="bg-white rounded-lg shadow p-6 mb-8">
-      <h3 className="font-semibold text-lg mb-4">Credit Management</h3>
+      <h3 className="font-semibold text-lg mb-4 text-black">Credit Management</h3>
       <div className="flex flex-col gap-2 text-gray-700">
         <div className="flex justify-between">
           <span>Credits Remaining</span>

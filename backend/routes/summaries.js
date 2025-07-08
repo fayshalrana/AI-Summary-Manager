@@ -46,39 +46,20 @@ router.get('/', async (req, res) => {
     let summaries;
     let totalCount;
 
-    // Check user role for access level
-    if (req.user.role === 'admin' || req.user.role === 'reviewer') {
-      // Admins and reviewers can see all summaries
-      const query = {};
-      if (search) {
-        query.$or = [
-          { originalText: { $regex: search, $options: 'i' } },
-          { summary: { $regex: search, $options: 'i' } }
-        ];
-      }
-      
-      totalCount = await Summary.countDocuments(query);
-      summaries = await Summary.find(query)
-        .sort({ createdAt: -1 })
-        .skip((pageNum - 1) * limitNum)
-        .limit(limitNum)
-        .populate('userId', 'name email');
-    } else {
-      // Regular users can only see their own summaries
-      const query = { userId: req.user._id };
-      if (search) {
-        query.$or = [
-          { originalText: { $regex: search, $options: 'i' } },
-          { summary: { $regex: search, $options: 'i' } }
-        ];
-      }
-      
-      totalCount = await Summary.countDocuments(query);
-      summaries = await Summary.find(query)
-        .sort({ createdAt: -1 })
-        .skip((pageNum - 1) * limitNum)
-        .limit(limitNum);
+    // Always return all summaries, regardless of user role
+    const query = {};
+    if (search) {
+      query.$or = [
+        { originalText: { $regex: search, $options: 'i' } },
+        { summary: { $regex: search, $options: 'i' } }
+      ];
     }
+    totalCount = await Summary.countDocuments(query);
+    summaries = await Summary.find(query)
+      .sort({ createdAt: -1 })
+      .skip((pageNum - 1) * limitNum)
+      .limit(limitNum)
+      .populate('userId', 'name email');
 
     res.json({
       summaries,
@@ -124,13 +105,18 @@ router.post('/', async (req, res) => {
     const aiResult = await aiService.generateSummary(text, provider, prompt, model);
 
     // Create summary record
+    const wordCount = {
+      original: aiService.validateText(text).wordCount,
+      summary: aiService.validateText(aiResult.summary).wordCount
+    };
     const summary = new Summary({
       userId: req.user._id,
       originalText: text,
       summary: aiResult.summary,
+      wordCount,
       prompt: prompt || aiService.validateText.defaultPrompt,
       aiProvider: provider,
-      model: model || (provider === 'openai' ? 'gpt-3.5-turbo' : 'gemini-pro'),
+      model: model || (provider === 'openai' ? 'gpt-3.5-turbo' : 'gemini-1.5-flash-latest'),
       status: 'completed',
       processingTime: aiResult.processingTime,
       creditsUsed: 1
@@ -155,7 +141,7 @@ router.post('/', async (req, res) => {
   } catch (error) {
     console.error('Create summary error:', error);
     
-    if (error.message.includes('Insufficient credits')) {
+    if (typeof error.message === 'string' && error.message.includes('Insufficient credits')) {
       return res.status(400).json({ error: error.message });
     }
     
@@ -193,14 +179,19 @@ router.post('/upload', upload.single('file'), async (req, res) => {
       model
     );
 
-    // Create summary record
+    // Create summary record (file upload)
+    const wordCountFile = {
+      original: aiService.validateText(fileResult.text).wordCount,
+      summary: aiService.validateText(aiResult.summary).wordCount
+    };
     const summary = new Summary({
       userId: req.user._id,
       originalText: fileResult.text,
       summary: aiResult.summary,
+      wordCount: wordCountFile,
       prompt: prompt || 'Summarize the following text in a clear and concise manner:',
       aiProvider: provider,
-      model: model || (provider === 'openai' ? 'gpt-3.5-turbo' : 'gemini-pro'),
+      model: model || (provider === 'openai' ? 'gpt-3.5-turbo' : 'gemini-1.5-flash-latest'),
       status: 'completed',
       processingTime: aiResult.processingTime,
       creditsUsed: 1
@@ -226,7 +217,7 @@ router.post('/upload', upload.single('file'), async (req, res) => {
   } catch (error) {
     console.error('Upload summary error:', error);
     
-    if (error.message.includes('Insufficient credits')) {
+    if (typeof error.message === 'string' && error.message.includes('Insufficient credits')) {
       return res.status(400).json({ error: error.message });
     }
     
@@ -298,7 +289,7 @@ router.put('/:id', async (req, res) => {
   } catch (error) {
     console.error('Update summary error:', error);
     
-    if (error.message.includes('Insufficient credits')) {
+    if (typeof error.message === 'string' && error.message.includes('Insufficient credits')) {
       return res.status(400).json({ error: error.message });
     }
     

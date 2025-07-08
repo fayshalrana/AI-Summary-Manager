@@ -20,7 +20,9 @@ const Navbar: React.FC = () => {
       <div className="flex items-center gap-6 text-lg font-semibold">
         <div className="flex items-center gap-2">
           <FaRegCreditCard className="text-white" />
-          <span>{user?.credits ?? 0} Credits</span>
+          <span>
+            {user?.role === 'admin' ? 'No Limit' : `${user?.credits ?? 0} Credits`}
+          </span>
         </div>
         <div className="flex items-center gap-2">
           <span className="text-sm text-white/80">Role:</span>

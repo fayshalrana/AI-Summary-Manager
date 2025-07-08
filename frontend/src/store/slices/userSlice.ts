@@ -8,6 +8,7 @@ const API_BASE_URL = 'http://localhost:5000/api';
 // Types
 export interface User {
   id: string;
+  _id?: string;
   name: string;
   email: string;
   role: 'user' | 'admin' | 'editor' | 'reviewer';
@@ -107,13 +108,32 @@ export const deductUserCredit = createAsyncThunk(
   }
 );
 
+export const getAllUsers = createAsyncThunk(
+  'user/getAllUsers',
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const { user } = getState() as { user: AuthState };
+      if (!user.token) {
+        throw new Error('No token available');
+      }
+      const response = await axios.get(`${API_BASE_URL}/users`, {
+        headers: { Authorization: `Bearer ${user.token}` }
+      });
+      return response.data.users;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.error || 'Failed to fetch users');
+    }
+  }
+);
+
 // Initial state
-const initialState: AuthState = {
+const initialState: AuthState & { users?: User[] } = {
   user: null,
   token: localStorage.getItem('token'),
   isAuthenticated: false,
   loading: false,
   error: null,
+  users: [],
 };
 
 // User slice
@@ -214,6 +234,21 @@ const userSlice = createSlice({
         if (state.user) {
           state.user.credits = action.payload.remainingCredits;
         }
+      });
+
+    // Get all users
+    builder
+      .addCase(getAllUsers.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getAllUsers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.users = action.payload;
+      })
+      .addCase(getAllUsers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
       });
   },
 });
