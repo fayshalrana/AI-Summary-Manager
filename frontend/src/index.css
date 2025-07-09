@@ -127,3 +127,30 @@ button:focus-visible {
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: rgba(139, 92, 246, 0.6);
 }
+
+/* Custom Sidebar Button Styles */
+.sideBar_btn {
+  background-color: #7878789a; /* gray-100 */
+  transition: all 0.3s ease;
+}
+
+.sideBar_btn:hover {
+  background-color: #e5e7eb; /* gray-200 */
+  transform: translateX(4px);
+  color:#646cff;
+}
+
+.sideBar_btn:active {
+  background-color: #d1d5db; /* gray-300 */
+  transform: translateX(2px);
+}
+
+.sideBar_btn.logout_btn{
+  background-color: #646cff;
+  color:white;
+}
+.sideBar_btn.logout_btn:hover{
+  background: rgba(253, 27, 27, 0.723);
+  color:white;
+  border-color: red;
+}

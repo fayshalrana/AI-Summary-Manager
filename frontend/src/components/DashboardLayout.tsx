@@ -132,7 +132,7 @@ const DashboardLayout: React.FC = () => {
         {user?.role === 'admin' && (
           <Sidebar onNavigate={setActiveSection} activeSection={activeSection} />
         )}
-        <div className={user?.role === 'admin' ? 'flex-1 px-8' : 'flex-1 px-8'}>
+        <div className={user?.role === 'admin' ? 'flex-1 pr-8 pl-[250px]' : 'flex-1 px-8'}>
           <WelcomeHeader />
           <StatsGrid
             totalSummaries={totalSummaries}
