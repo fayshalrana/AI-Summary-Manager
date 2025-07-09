@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useAppSelector, useAppDispatch } from '../store/hooks';
-import { getAllUsers, updateUserCredits, updateUserRole } from '../store/slices/userSlice';
+import { getAllUsers, updateUserCredits, updateUserRole, clearJustRegistered } from '../store/slices/userSlice';
 import { fetchSummaries } from '../store/slices/summarySlice';
 import type { User } from '../store/slices/userSlice';
 import type { Summary } from '../store/slices/summarySlice';
@@ -15,7 +15,7 @@ import Sidebar from './Sidebar';
 import { HiX } from 'react-icons/hi';
 
 const DashboardLayout: React.FC = () => {
-  const { user, users } = useAppSelector(state => state.user);
+  const { user, users, justRegistered } = useAppSelector(state => state.user);
   const { summaries, loading: summariesLoading } = useAppSelector(state => state.summary);
   const dispatch = useAppDispatch();
   const [activeSection, setActiveSection] = useState('dashboard');
@@ -25,6 +25,34 @@ const DashboardLayout: React.FC = () => {
   const [selectedSummary, setSelectedSummary] = useState<Summary | null>(null);
   const [creditValue, setCreditValue] = useState(0);
   const [roleValue, setRoleValue] = useState<'user' | 'editor' | 'reviewer'>('user');
+  const hasShownWelcome = useRef(false);
+
+  // Show welcome notification when user has just registered
+  useEffect(() => {
+    if (justRegistered && user && !hasShownWelcome.current) {
+      hasShownWelcome.current = true;
+      toast.success(
+        `Welcome to SmartBrief, ${user.name}! 🎉\nYour account has been created successfully and you have ${user.credits} credits to start summarizing.`,
+        {
+          duration: 6000,
+          style: {
+            background: '#10B981',
+            color: '#fff',
+            fontSize: '14px',
+            lineHeight: '1.5',
+          },
+        }
+      );
+      dispatch(clearJustRegistered());
+    }
+  }, [justRegistered, user]);
+
+  // Reset the welcome flag when user changes (logout/login)
+  useEffect(() => {
+    if (!user) {
+      hasShownWelcome.current = false;
+    }
+  }, [user]);
 
   useEffect(() => {
     if (user?.role === 'admin') {

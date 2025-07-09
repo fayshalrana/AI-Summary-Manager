@@ -20,6 +20,7 @@ export interface AuthState {
   isAuthenticated: boolean;
   loading: boolean;
   error: string | null;
+  justRegistered: boolean;
 }
 
 // Async thunks
@@ -149,6 +150,7 @@ const initialState: AuthState & { users?: User[] } = {
   isAuthenticated: false,
   loading: false,
   error: null,
+  justRegistered: false,
   users: [],
 };
 
@@ -177,6 +179,9 @@ const userSlice = createSlice({
         state.user.credits = action.payload;
       }
     },
+    clearJustRegistered: (state) => {
+      state.justRegistered = false;
+    },
   },
   extraReducers: (builder) => {
     // Register
@@ -190,6 +195,7 @@ const userSlice = createSlice({
         state.user = action.payload.user;
         state.token = action.payload.token;
         state.isAuthenticated = true;
+        state.justRegistered = true;
         localStorage.setItem('token', action.payload.token);
       })
       .addCase(registerUser.rejected, (state, action) => {
@@ -280,5 +286,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { logout, clearError, setToken, updateCredits } = userSlice.actions;
+export const { logout, clearError, setToken, updateCredits, clearJustRegistered } = userSlice.actions;
 export default userSlice.reducer; 
