@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { createSummaryFromText, createSummaryFromFile } from '../store/slices/summarySlice';
 import type { Summary } from '../store/slices/summarySlice';
 import toast from 'react-hot-toast';
+import { HiX } from 'react-icons/hi';
 
 const TABS = [
   { label: 'Text Input', value: 'text' },
@@ -188,7 +189,7 @@ const CreateSummaryPanel: React.FC = () => {
                   <button
                     type="button"
                     onClick={handleRemoveFile}
-                    className="p-1 text-gray-400 hover:text-red-500 transition-colors"
+                    className="p-1 text-white hover:text-red-500 transition-colors"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -232,7 +233,7 @@ const CreateSummaryPanel: React.FC = () => {
                 onClick={() => { setShowSummaryModal(false); setGeneratedSummary(null); }}
                 aria-label="Close"
               >
-                &times;
+                <HiX />
               </button>
             </div>
 

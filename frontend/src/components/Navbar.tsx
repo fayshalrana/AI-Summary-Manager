@@ -14,7 +14,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="w-full h-16 flex items-center justify-between px-8 bg-gradient-to-r from-purple-500 to-indigo-500 shadow text-white">
+    <nav className="sticky top-0 z-50 w-full h-16 flex items-center justify-between px-8 bg-gradient-to-r from-purple-500 to-indigo-500 shadow text-white">
       <div className="flex items-center gap-2 text-2xl font-bold">
         <span className="inline-block w-6 h-6 bg-white rounded mr-2" />
         SmartBrief
@@ -37,7 +37,7 @@ const Navbar: React.FC = () => {
         {user?.role !== 'admin' && (
           <button
             onClick={handleLogout}
-            className="ml-4 px-4 py-1 bg-white/20 hover:bg-white/30 text-white rounded transition-colors text-base font-medium"
+            className="ml-4 px-4 py-1 bg-white/20 hover:!bg-white hover:text-black text-white rounded transition-colors transition-transform duration-300 text-base font-medium hover:scale-90"
           >
             Logout
           </button>

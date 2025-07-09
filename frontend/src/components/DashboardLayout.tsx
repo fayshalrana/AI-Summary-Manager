@@ -12,6 +12,7 @@ import CreateSummaryPanel from './CreateSummaryPanel';
 import RecentSummariesPanel from './RecentSummariesPanel';
 import CreditManagementPanel from './CreditManagementPanel';
 import Sidebar from './Sidebar';
+import { HiX } from 'react-icons/hi';
 
 const DashboardLayout: React.FC = () => {
   const { user, users } = useAppSelector(state => state.user);
@@ -29,18 +30,28 @@ const DashboardLayout: React.FC = () => {
     if (user?.role === 'admin') {
       dispatch(getAllUsers());
     }
-    // Fetch summaries for history section
-    if (activeSection === 'history') {
-      const loadingToast = toast.loading('Loading summaries...');
+  }, [user, dispatch]);
+
+  useEffect(() => {
+    // Fetch summaries for dashboard and history sections
+    if (activeSection === 'dashboard' || activeSection === 'history') {
+      // const loadingToast = toast.loading('Loading summaries...');
       dispatch(fetchSummaries({ limit: 100 }))
         .then(() => {
-          toast.success('Summaries loaded successfully!', { id: loadingToast });
+          // toast.success('Summaries loaded successfully!', { id: loadingToast });
         })
         .catch(() => {
-          toast.error('Failed to load summaries', { id: loadingToast });
+          // toast.error('Failed to load summaries', { id: loadingToast });
         });
     }
-  }, [user, dispatch, activeSection]);
+  }, [dispatch, activeSection]);
+
+  // Initial fetch for dashboard stats
+  useEffect(() => {
+    if (user && !summaries.length) {
+      dispatch(fetchSummaries({ limit: 100 }));
+    }
+  }, [user, dispatch, summaries.length]);
 
   useEffect(() => {
     if (showCreditModal && selectedUser && users) {
@@ -88,11 +99,31 @@ const DashboardLayout: React.FC = () => {
   //   }
   // };
 
-  // Placeholder stats
-  const totalSummaries = 12;
+  // Calculate stats from actual data
+  const totalSummaries = summaries?.length || 0;
   const creditsRemaining = user?.role === 'admin' ? Infinity : user?.credits ?? 0;
-  const timeSaved = '2.5h';
-  const avgCompression = '75%';
+  
+  // Calculate time saved based on average processing time
+  const totalProcessingTime = summaries?.reduce((total, summary) => total + summary.processingTime, 0) || 0;
+  const avgProcessingTime = summaries?.length ? totalProcessingTime / summaries.length : 0;
+  const timeSavedMs = summaries?.reduce((total, summary) => {
+    const originalWords = summary.wordCount.original;
+    const summaryWords = summary.wordCount.summary;
+    // Estimate 2 seconds per word saved (reading time)
+    return total + ((originalWords - summaryWords) * 2000);
+  }, 0) || 0;
+  const timeSaved = timeSavedMs > 0 ? `${Math.round(timeSavedMs / 1000 / 60)}m` : '0m';
+  
+  // Calculate average compression ratio
+  const totalCompression = summaries?.reduce((total, summary) => {
+    const originalWords = summary.wordCount.original;
+    const summaryWords = summary.wordCount.summary;
+    if (originalWords > 0) {
+      return total + ((originalWords - summaryWords) / originalWords) * 100;
+    }
+    return total;
+  }, 0) || 0;
+  const avgCompression = summaries?.length ? `${Math.round(totalCompression / summaries.length)}%` : '0%';
 
   return (
     <div className="min-h-screen w-screen bg-gradient-to-b from-purple-100 to-blue-50 flex flex-col">
@@ -101,7 +132,7 @@ const DashboardLayout: React.FC = () => {
         {user?.role === 'admin' && (
           <Sidebar onNavigate={setActiveSection} activeSection={activeSection} />
         )}
-        <div className={user?.role === 'admin' ? 'flex-1 pl-8' : 'flex-1 px-8'}>
+        <div className={user?.role === 'admin' ? 'flex-1 px-8' : 'flex-1 px-8'}>
           <WelcomeHeader />
           <StatsGrid
             totalSummaries={totalSummaries}
@@ -187,7 +218,7 @@ const DashboardLayout: React.FC = () => {
                           <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                             <button
                               onClick={() => handleUserClick(userItem)}
-                              className="text-purple-600 hover:text-purple-900 bg-purple-50 hover:bg-purple-100 px-3 py-1 rounded-md transition-colors"
+                              className="text-white hover:text-red-700 border-transparent bg-purple-50 hover:!bg-purple-200 px-3 py-1 focus:outline-none transition-colors transition-transform duration-300 ease-in-out !border-2 hover:!border-red-800"
                             >
                               Edit
                             </button>
@@ -331,13 +362,13 @@ const DashboardLayout: React.FC = () => {
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-lg max-w-sm w-full p-6 relative">
             <button
-              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl p-1"
+              className="absolute top-5 right-2 text-white hover:text-red-700 border-transparent bg-purple-50 hover:!bg-red-200 px-3 py-1 focus:outline-none transition-colors transition-transform duration-300 ease-in-out !border-2 hover:!border-red-800"
               onClick={() => { setShowCreditModal(false); setSelectedUser(null); }}
               aria-label="Close"
             >
-              &times;
+              <HiX />
             </button>
-            <h2 className="text-xl font-bold mb-4 text-black">Update Credits for {selectedUser?.name}</h2>
+            <h2 className="text-xl font-bold mb-4 text-black">Update C&R for {selectedUser?.name}</h2>
             <form onSubmit={handleCreditUpdate} className="flex flex-col gap-4">
               <label className="text-gray-700 font-medium">Credits</label>
               <input
@@ -381,11 +412,11 @@ const DashboardLayout: React.FC = () => {
                 </p>
               </div>
               <button
-                className="text-gray-500 hover:text-gray-700 text-2xl p-1"
+                className="text-white hover:text-red-700 text-2xl p-1 hover:!bg-red-100 focus:outline-none transition-colors transition-transform duration-300 ease-in-out hover:!border-2 hover:!border-red-800"
                 onClick={() => { setShowSummaryModal(false); setSelectedSummary(null); }}
                 aria-label="Close"
               >
-                &times;
+                <HiX/>
               </button>
             </div>
 
