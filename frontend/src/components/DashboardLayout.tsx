@@ -93,25 +93,20 @@ const DashboardLayout: React.FC = () => {
     if (selectedUser) {
       const loadingToast = toast.loading('Updating user information...');
       try {
-        await dispatch(updateUserCredits({ userId: selectedUser._id || selectedUser.id, credits: creditValue }));
-        if (selectedUser.role !== roleValue) {
-          await dispatch(updateUserRole({ userId: selectedUser._id || selectedUser.id, role: roleValue }));
-        }
-        await dispatch(getAllUsers());
+      await dispatch(updateUserCredits({ userId: selectedUser._id || selectedUser.id, credits: creditValue }));
+      if (selectedUser.role !== roleValue) {
+        await dispatch(updateUserRole({ userId: selectedUser._id || selectedUser.id, role: roleValue }));
+      }
+      await dispatch(getAllUsers());
         toast.success('User information updated successfully!', { id: loadingToast });
-        setShowCreditModal(false);
-        setSelectedUser(null);
+      setShowCreditModal(false);
+      setSelectedUser(null);
       } catch (error) {
         toast.error('Failed to update user information. Please try again.', { id: loadingToast });
       }
     }
   };
 
-  // const handleRoleUpdate = async (user: User, newRole: 'user' | 'admin' | 'editor' | 'reviewer') => {
-  //   if ((user._id || user.id) && user.role !== newRole) {
-  //     await dispatch(updateUserRole({ userId: user._id || user.id, role: newRole }));
-  //   }
-  // };
 
   // Calculate stats from actual data
   const totalSummaries = summaries?.length || 0;
@@ -154,9 +149,9 @@ const DashboardLayout: React.FC = () => {
           />
           
           {activeSection === 'dashboard' ? (
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              <div className="lg:col-span-2">
-                <CreateSummaryPanel />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2">
+              <CreateSummaryPanel />
               </div>
               <div className="flex flex-col gap-8">
                 <RecentSummariesPanel />
@@ -208,8 +203,8 @@ const DashboardLayout: React.FC = () => {
                               <div className="ml-4">
                                 <div className="text-sm font-medium text-gray-900">{userItem.name}</div>
                                 <div className="text-sm text-gray-500">ID: {userItem._id || userItem.id}</div>
-                              </div>
-                            </div>
+                          </div>
+                        </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="text-sm text-gray-900">{userItem.email}</div>
@@ -362,9 +357,9 @@ const DashboardLayout: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               <div className="lg:col-span-2">
                 <CreateSummaryPanel />
-              </div>
-              <div className="flex flex-col gap-8">
-                <RecentSummariesPanel />
+            </div>
+            <div className="flex flex-col gap-8">
+              <RecentSummariesPanel />
               </div>
             </div>
           )}
