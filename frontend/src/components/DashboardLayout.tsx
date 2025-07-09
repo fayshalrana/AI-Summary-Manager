@@ -10,7 +10,6 @@ import WelcomeHeader from './WelcomeHeader';
 import StatsGrid from './StatsGrid';
 import CreateSummaryPanel from './CreateSummaryPanel';
 import RecentSummariesPanel from './RecentSummariesPanel';
-import CreditManagementPanel from './CreditManagementPanel';
 import Sidebar from './Sidebar';
 import { HiX } from 'react-icons/hi';
 
@@ -60,19 +59,6 @@ const DashboardLayout: React.FC = () => {
     }
   }, [user, dispatch]);
 
-  useEffect(() => {
-    // Fetch summaries for dashboard and history sections
-    if (activeSection === 'dashboard' || activeSection === 'history') {
-      // const loadingToast = toast.loading('Loading summaries...');
-      dispatch(fetchSummaries({ limit: 100 }))
-        .then(() => {
-          // toast.success('Summaries loaded successfully!', { id: loadingToast });
-        })
-        .catch(() => {
-          // toast.error('Failed to load summaries', { id: loadingToast });
-        });
-    }
-  }, [dispatch, activeSection]);
 
   // Initial fetch for dashboard stats
   useEffect(() => {
@@ -132,12 +118,10 @@ const DashboardLayout: React.FC = () => {
   const creditsRemaining = user?.role === 'admin' ? Infinity : user?.credits ?? 0;
   
   // Calculate time saved based on average processing time
-  const totalProcessingTime = summaries?.reduce((total, summary) => total + summary.processingTime, 0) || 0;
-  const avgProcessingTime = summaries?.length ? totalProcessingTime / summaries.length : 0;
+
   const timeSavedMs = summaries?.reduce((total, summary) => {
     const originalWords = summary.wordCount.original;
     const summaryWords = summary.wordCount.summary;
-    // Estimate 2 seconds per word saved (reading time)
     return total + ((originalWords - summaryWords) * 2000);
   }, 0) || 0;
   const timeSaved = timeSavedMs > 0 ? `${Math.round(timeSavedMs / 1000 / 60)}m` : '0m';
