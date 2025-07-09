@@ -126,6 +126,24 @@ export const getAllUsers = createAsyncThunk(
   }
 );
 
+export const updateUserRole = createAsyncThunk(
+  'user/updateRole',
+  async ({ userId, role }: { userId: string; role: 'user' | 'admin' | 'editor' | 'reviewer' }, { getState, rejectWithValue }) => {
+    try {
+      const { user } = getState() as { user: AuthState };
+      if (!user.token) {
+        throw new Error('No token available');
+      }
+      const response = await axios.patch(`${API_BASE_URL}/users/${userId}/role`, { role }, {
+        headers: { Authorization: `Bearer ${user.token}` }
+      });
+      return response.data.user;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.error || 'Failed to update role');
+    }
+  }
+);
+
 // Initial state
 const initialState: AuthState & { users?: User[] } = {
   user: null,
@@ -249,6 +267,17 @@ const userSlice = createSlice({
       .addCase(getAllUsers.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
+      });
+
+    // Update role
+    builder
+      .addCase(updateUserRole.fulfilled, (state, action) => {
+        if (state.users) {
+          const idx = state.users.findIndex(u => u._id === action.payload._id || u.id === action.payload.id);
+          if (idx !== -1) {
+            state.users[idx].role = action.payload.role;
+          }
+        }
       });
   },
 });
