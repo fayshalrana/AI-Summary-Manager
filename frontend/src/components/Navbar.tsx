@@ -2,12 +2,14 @@ import React from 'react';
 import { FaRegCreditCard } from 'react-icons/fa';
 import { useAppSelector, useAppDispatch } from '../store/hooks';
 import { logout } from '../store/slices/userSlice';
+import toast from 'react-hot-toast';
 
 const Navbar: React.FC = () => {
   const { user } = useAppSelector(state => state.user);
   const dispatch = useAppDispatch();
 
   const handleLogout = () => {
+    toast.success('Logged out successfully!');
     dispatch(logout());
   };
 

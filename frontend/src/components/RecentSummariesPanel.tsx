@@ -66,7 +66,7 @@ const RecentSummariesPanel: React.FC = () => {
         {!loading && summaries.length === 0 && <li className="text-gray-500">No summaries found.</li>}
       </ul>
       <button
-        className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded transition-colors"
+        className="w-full bg-black text-white hover:bg-gray-200 font-semibold py-2 px-4 rounded transition-colors"
         onClick={handleShowAll}
       >
         View All Summaries &rarr;

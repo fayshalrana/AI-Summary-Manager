@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { updateSummary, deleteSummary } from '../store/slices/summarySlice';
 import type { Summary } from '../store/slices/summarySlice';
+import toast from 'react-hot-toast';
 // import LoadingSpinner from './LoadingSpinner';
 
 interface SummaryDetailProps {
@@ -16,7 +17,15 @@ const SummaryDetail = ({ summary, onClose, canEdit, canDelete }: SummaryDetailPr
   const { loading, error } = useAppSelector(state => state.summary);
   // const { user } = useAppSelector(state => state.user);
 
+  // Show error toast when there's an error
+  React.useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
+
   const [isEditing, setIsEditing] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [editData, setEditData] = useState({
     prompt: summary.prompt,
     provider: summary.aiProvider,
@@ -32,23 +41,38 @@ const SummaryDetail = ({ summary, onClose, canEdit, canDelete }: SummaryDetailPr
   };
 
   const handleUpdate = async () => {
-    const result = await dispatch(updateSummary({
-      summaryId: summary._id,
-      prompt: editData.prompt,
-      provider: editData.provider as 'openai' | 'gemini',
-      model: editData.model
-    }));
-    if (result.meta && result.meta.requestStatus === 'fulfilled') {
-      setIsEditing(false);
+    const loadingToast = toast.loading('Updating summary...');
+    try {
+      const result = await dispatch(updateSummary({
+        summaryId: summary._id,
+        prompt: editData.prompt,
+        provider: editData.provider as 'openai' | 'gemini',
+        model: editData.model
+      }));
+      if (result.meta && result.meta.requestStatus === 'fulfilled') {
+        toast.success('Summary updated successfully!', { id: loadingToast });
+        setIsEditing(false);
+      } else {
+        toast.error('Failed to update summary. Please try again.', { id: loadingToast });
+      }
+    } catch (error) {
+      toast.error('Failed to update summary. Please try again.', { id: loadingToast });
     }
   };
 
   const handleDelete = async () => {
-    if (window.confirm('Are you sure you want to delete this summary? This action cannot be undone.')) {
-      await dispatch(deleteSummary(summary._id));
-      if (!error) {
+    const loadingToast = toast.loading('Deleting summary...');
+    try {
+      const result = await dispatch(deleteSummary(summary._id));
+      if (result.meta && result.meta.requestStatus === 'fulfilled') {
+        toast.success('Summary deleted successfully!', { id: loadingToast });
+        setShowDeleteModal(false);
         onClose();
+      } else {
+        toast.error('Failed to delete summary. Please try again.', { id: loadingToast });
       }
+    } catch (error) {
+      toast.error('Failed to delete summary. Please try again.', { id: loadingToast });
     }
   };
 
@@ -77,7 +101,7 @@ const SummaryDetail = ({ summary, onClose, canEdit, canDelete }: SummaryDetailPr
           </h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600"
+            className="text-white hover:text-gray-600"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -129,15 +153,30 @@ const SummaryDetail = ({ summary, onClose, canEdit, canDelete }: SummaryDetailPr
           {/* Original Text */}
           <div>
             <h3 className="font-semibold text-gray-900 mb-3">Original Text</h3>
-                            <div className="bg-gray-50 p-4 rounded-lg max-h-40 overflow-y-auto custom-scrollbar">
+                            <div className="bg-gray-50 p-4 rounded-lg border border-gray-300 max-h-40 overflow-y-auto custom-scrollbar">
               <p className="text-sm text-gray-700 whitespace-pre-wrap">{summary.originalText}</p>
             </div>
           </div>
 
           {/* Summary */}
           <div>
-            <h3 className="font-semibold text-gray-900 mb-3">Summary</h3>
-            <div className="bg-blue-50 p-4 rounded-lg">
+            <div className="flex items-center mb-3">
+              <h3 className="font-semibold text-gray-900 mr-2">Summary</h3>
+              <button
+                type="button"
+                className="ml-auto px-2 py-1 text-xs bg-blue-100 text-white rounded hover:bg-blue-200 transition-colors"
+                onClick={() => {
+                  if (navigator && navigator.clipboard) {
+                    navigator.clipboard.writeText(summary.summary);
+                    toast.success('Summary copied to clipboard!');
+                  }
+                }}
+                title="Copy summary to clipboard"
+              >
+                Copy
+              </button>
+            </div>
+            <div className="bg-blue-50 p-4 rounded-lg border border-gray-300">
               <p className="text-gray-800 whitespace-pre-wrap">{summary.summary}</p>
             </div>
           </div>
@@ -164,7 +203,7 @@ const SummaryDetail = ({ summary, onClose, canEdit, canDelete }: SummaryDetailPr
           <div className="flex justify-end space-x-3 pt-4 border-t">
             <button
               onClick={onClose}
-              className="px-4 py-2 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 transition-colors"
+              className="px-4 py-2 text-gray-100 bg-black/40 rounded-md hover:bg-gray-300 transition-colors"
             >
               Close
             </button>
@@ -190,7 +229,7 @@ const SummaryDetail = ({ summary, onClose, canEdit, canDelete }: SummaryDetailPr
 
             {canDelete && (
               <button
-                onClick={handleDelete}
+                onClick={() => setShowDeleteModal(true)}
                 disabled={loading}
                 className="px-4 py-2 text-white bg-red-600 rounded-md hover:bg-red-700 disabled:opacity-50 transition-colors"
               >
@@ -200,6 +239,47 @@ const SummaryDetail = ({ summary, onClose, canEdit, canDelete }: SummaryDetailPr
           </div>
         </div>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-[60]">
+          <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-6">
+            <div className="flex items-center mb-4">
+              <div className="flex-shrink-0 w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                </svg>
+              </div>
+              <div className="ml-4">
+                <h3 className="text-lg font-semibold text-gray-900">Delete Summary</h3>
+                <p className="text-sm text-gray-500">This action cannot be undone.</p>
+              </div>
+            </div>
+            
+            <div className="mb-6">
+              <p className="text-gray-700">
+                Are you sure you want to delete this summary? This action will permanently remove the summary and cannot be undone.
+              </p>
+            </div>
+
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                className="px-4 py-2 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDelete}
+                disabled={loading}
+                className="px-4 py-2 text-white bg-red-600 rounded-md hover:bg-red-700 disabled:opacity-50 transition-colors"
+              >
+                {loading ? 'Deleting...' : 'Delete Summary'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

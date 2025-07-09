@@ -2,6 +2,7 @@ import React from 'react';
 import { FaTachometerAlt, FaHistory, FaUser, FaSignOutAlt } from 'react-icons/fa';
 import { useAppDispatch } from '../store/hooks';
 import { logout } from '../store/slices/userSlice';
+import toast from 'react-hot-toast';
 
 interface SidebarProps {
   onNavigate: (section: string) => void;
@@ -23,6 +24,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onNavigate, activeSection }) => {
   const dispatch = useAppDispatch();
 
   const handleLogout = () => {
+    toast.success('Logged out successfully!');
     dispatch(logout());
   };
 

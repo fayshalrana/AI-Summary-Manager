@@ -3,6 +3,7 @@ import type { DragEvent } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { createSummaryFromText, createSummaryFromFile } from '../store/slices/summarySlice';
 import type { Summary } from '../store/slices/summarySlice';
+import toast from 'react-hot-toast';
 
 const TABS = [
   { label: 'Text Input', value: 'text' },
@@ -30,19 +31,38 @@ const CreateSummaryPanel: React.FC = () => {
     }
   }, [currentSummary, loading]);
 
+  // Show error toast when there's an error
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
+
   const handleTabClick = (tab: string) => setActiveTab(tab);
 
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (activeTab === 'text') {
       if (!content.trim()) return;
-      await dispatch(createSummaryFromText({ text: content, prompt: prompt.trim() || undefined, provider: 'gemini' }));
-      setContent('');
-      setPrompt('');
+      const loadingToast = toast.loading('Generating summary...');
+      try {
+        await dispatch(createSummaryFromText({ text: content, prompt: prompt.trim() || undefined, provider: 'gemini' }));
+        toast.success('Summary generated successfully!', { id: loadingToast });
+        setContent('');
+        setPrompt('');
+      } catch (error) {
+        toast.error('Failed to generate summary. Please try again.', { id: loadingToast });
+      }
     } else if (activeTab === 'file' && file) {
-      await dispatch(createSummaryFromFile({ file, prompt: prompt.trim() || undefined, provider: 'gemini' }));
-      setFile(null);
-      setPrompt('');
+      const loadingToast = toast.loading('Processing file and generating summary...');
+      try {
+        await dispatch(createSummaryFromFile({ file, prompt: prompt.trim() || undefined, provider: 'gemini' }));
+        toast.success('Summary generated successfully!', { id: loadingToast });
+        setFile(null);
+        setPrompt('');
+      } catch (error) {
+        toast.error('Failed to generate summary. Please try again.', { id: loadingToast });
+      }
     }
   };
 
@@ -298,7 +318,7 @@ const CreateSummaryPanel: React.FC = () => {
                   type="button"
                   onClick={() => {
                     navigator.clipboard.writeText(generatedSummary.summary);
-                    // You could add a toast notification here
+                    toast.success('Summary copied to clipboard!');
                   }}
                   className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md transition-colors"
                 >

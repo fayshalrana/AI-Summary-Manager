@@ -4,6 +4,7 @@ import { getAllUsers, updateUserCredits, updateUserRole } from '../store/slices/
 import { fetchSummaries } from '../store/slices/summarySlice';
 import type { User } from '../store/slices/userSlice';
 import type { Summary } from '../store/slices/summarySlice';
+import toast from 'react-hot-toast';
 import Navbar from './Navbar';
 import WelcomeHeader from './WelcomeHeader';
 import StatsGrid from './StatsGrid';
@@ -30,7 +31,14 @@ const DashboardLayout: React.FC = () => {
     }
     // Fetch summaries for history section
     if (activeSection === 'history') {
-      dispatch(fetchSummaries({ limit: 100 }));
+      const loadingToast = toast.loading('Loading summaries...');
+      dispatch(fetchSummaries({ limit: 100 }))
+        .then(() => {
+          toast.success('Summaries loaded successfully!', { id: loadingToast });
+        })
+        .catch(() => {
+          toast.error('Failed to load summaries', { id: loadingToast });
+        });
     }
   }, [user, dispatch, activeSection]);
 
@@ -58,13 +66,19 @@ const DashboardLayout: React.FC = () => {
   const handleCreditUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (selectedUser) {
-      await dispatch(updateUserCredits({ userId: selectedUser._id || selectedUser.id, credits: creditValue }));
-      if (selectedUser.role !== roleValue) {
-        await dispatch(updateUserRole({ userId: selectedUser._id || selectedUser.id, role: roleValue }));
+      const loadingToast = toast.loading('Updating user information...');
+      try {
+        await dispatch(updateUserCredits({ userId: selectedUser._id || selectedUser.id, credits: creditValue }));
+        if (selectedUser.role !== roleValue) {
+          await dispatch(updateUserRole({ userId: selectedUser._id || selectedUser.id, role: roleValue }));
+        }
+        await dispatch(getAllUsers());
+        toast.success('User information updated successfully!', { id: loadingToast });
+        setShowCreditModal(false);
+        setSelectedUser(null);
+      } catch (error) {
+        toast.error('Failed to update user information. Please try again.', { id: loadingToast });
       }
-      await dispatch(getAllUsers());
-      setShowCreditModal(false);
-      setSelectedUser(null);
     }
   };
 
