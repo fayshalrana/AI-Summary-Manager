@@ -80,7 +80,7 @@ router.get('/', async (req, res) => {
 // POST /api/summaries - Create new summary from text
 router.post('/', async (req, res) => {
   try {
-    const { text, prompt, provider = 'openai', model } = req.body;
+    const { text, prompt, model } = req.body;
 
     // Validate input
     if (!text) {
@@ -101,8 +101,8 @@ router.post('/', async (req, res) => {
       });
     }
 
-    // Generate summary using AI service
-    const aiResult = await aiService.generateSummary(text, provider, prompt, model);
+    // Generate summary using AI service (Gemini only)
+    const aiResult = await aiService.generateSummary(text, prompt, model);
 
     // Create summary record
     const wordCount = {
@@ -114,9 +114,9 @@ router.post('/', async (req, res) => {
       originalText: text,
       summary: aiResult.summary,
       wordCount,
-      prompt: prompt || aiService.validateText.defaultPrompt,
-      aiProvider: provider,
-      model: model || (provider === 'openai' ? 'gpt-3.5-turbo' : 'gemini-1.5-flash-latest'),
+      prompt: prompt || 'Summarize the following text in a clear and concise manner:',
+      aiProvider: 'gemini',
+      model: model || 'gemini-1.5-flash-latest',
       status: 'completed',
       processingTime: aiResult.processingTime,
       creditsUsed: 1
@@ -137,22 +137,15 @@ router.post('/', async (req, res) => {
         usage: aiResult.usage
       }
     });
-
-  } catch (error) {
-    console.error('Create summary error:', error);
-    
-    if (typeof error.message === 'string' && error.message.includes('Insufficient credits')) {
-      return res.status(400).json({ error: error.message });
-    }
-    
-    res.status(500).json({ error: 'Failed to create summary' });
+  } catch (err) {
+    res.status(500).json({ error: err.message || 'Failed to create summary' });
   }
 });
 
 // POST /api/summaries/upload - Create summary from file upload
 router.post('/upload', upload.single('file'), async (req, res) => {
   try {
-    const { prompt, provider = 'openai', model } = req.body;
+    const { prompt, model } = req.body;
 
     // Validate file
     const fileValidation = fileService.validateFile(req.file);
@@ -171,10 +164,9 @@ router.post('/upload', upload.single('file'), async (req, res) => {
       });
     }
 
-    // Generate summary using AI service
+    // Generate summary using AI service (Gemini only)
     const aiResult = await aiService.generateSummary(
       fileResult.text, 
-      provider, 
       prompt, 
       model
     );
@@ -190,8 +182,8 @@ router.post('/upload', upload.single('file'), async (req, res) => {
       summary: aiResult.summary,
       wordCount: wordCountFile,
       prompt: prompt || 'Summarize the following text in a clear and concise manner:',
-      aiProvider: provider,
-      model: model || (provider === 'openai' ? 'gpt-3.5-turbo' : 'gemini-1.5-flash-latest'),
+      aiProvider: 'gemini',
+      model: model || 'gemini-1.5-flash-latest',
       status: 'completed',
       processingTime: aiResult.processingTime,
       creditsUsed: 1
@@ -203,9 +195,8 @@ router.post('/upload', upload.single('file'), async (req, res) => {
     await CreditService.deductCredits(req.user._id);
 
     res.status(201).json({
-      message: 'Summary created successfully from file',
+      message: 'Summary created successfully',
       summary,
-      fileInfo: fileResult.metadata,
       aiInfo: {
         provider: aiResult.provider,
         model: aiResult.model,
@@ -213,15 +204,8 @@ router.post('/upload', upload.single('file'), async (req, res) => {
         usage: aiResult.usage
       }
     });
-
-  } catch (error) {
-    console.error('Upload summary error:', error);
-    
-    if (typeof error.message === 'string' && error.message.includes('Insufficient credits')) {
-      return res.status(400).json({ error: error.message });
-    }
-    
-    res.status(500).json({ error: 'Failed to create summary from file' });
+  } catch (err) {
+    res.status(500).json({ error: err.message || 'Failed to create summary from file' });
   }
 });
 
@@ -229,7 +213,7 @@ router.post('/upload', upload.single('file'), async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { prompt, provider, model } = req.body;
+    const { prompt, model } = req.body;
 
     // Find summary and check ownership
     const summary = await Summary.findById(id);
@@ -253,10 +237,9 @@ router.put('/:id', async (req, res) => {
       });
     }
 
-    // Generate new summary
+    // Generate new summary (Gemini only)
     const aiResult = await aiService.generateSummary(
       summary.originalText,
-      provider || summary.aiProvider,
       prompt || summary.prompt,
       model || summary.model
     );
@@ -264,7 +247,7 @@ router.put('/:id', async (req, res) => {
     // Update summary
     summary.summary = aiResult.summary;
     summary.prompt = prompt || summary.prompt;
-    summary.aiProvider = provider || summary.aiProvider;
+    summary.aiProvider = 'gemini';
     summary.model = model || summary.model;
     summary.processingTime = aiResult.processingTime;
     summary.creditsUsed += 1;
@@ -285,15 +268,8 @@ router.put('/:id', async (req, res) => {
         usage: aiResult.usage
       }
     });
-
-  } catch (error) {
-    console.error('Update summary error:', error);
-    
-    if (typeof error.message === 'string' && error.message.includes('Insufficient credits')) {
-      return res.status(400).json({ error: error.message });
-    }
-    
-    res.status(500).json({ error: 'Failed to update summary' });
+  } catch (err) {
+    res.status(500).json({ error: err.message || 'Failed to update summary' });
   }
 });
 

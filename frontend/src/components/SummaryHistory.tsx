@@ -165,7 +165,7 @@ const SummaryHistory = () => {
                     )}
                   </p>
                   <p>
-                    <span className="font-medium">AI Provider:</span> {summary.aiProvider} - {summary.model}
+                    <span className="font-medium">Provider:</span> {summary.aiProvider === 'gemini' ? 'Gemini' : summary.aiProvider}
                   </p>
                   <p>
                     <span className="font-medium">Created:</span> {formatDate(summary.createdAt)}

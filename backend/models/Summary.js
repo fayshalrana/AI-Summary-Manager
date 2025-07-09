@@ -35,12 +35,12 @@ const summarySchema = new mongoose.Schema({
   },
   aiProvider: {
     type: String,
-    enum: ['openai', 'gemini'],
-    default: 'openai'
+    enum: ['gemini'],
+    default: 'gemini'
   },
   model: {
     type: String,
-    default: 'gpt-3.5-turbo'
+    default: 'gemini-1.5-flash-latest'
   },
   status: {
     type: String,
