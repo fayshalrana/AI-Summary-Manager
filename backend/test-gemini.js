@@ -14,7 +14,7 @@ async function testGeminiAPI() {
   try {
     // Initialize Gemini
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-latest' });
 
     // Test with a simple prompt
     const prompt = 'Hello! Please respond with "Gemini API is working!" if you can see this message.';
