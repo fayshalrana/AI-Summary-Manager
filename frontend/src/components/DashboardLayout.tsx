@@ -54,11 +54,11 @@ const DashboardLayout: React.FC = () => {
     }
   };
 
-  const handleRoleUpdate = async (user: User, newRole: 'user' | 'admin' | 'editor' | 'reviewer') => {
-    if ((user._id || user.id) && user.role !== newRole) {
-      await dispatch(updateUserRole({ userId: user._id || user.id, role: newRole }));
-    }
-  };
+  // const handleRoleUpdate = async (user: User, newRole: 'user' | 'admin' | 'editor' | 'reviewer') => {
+  //   if ((user._id || user.id) && user.role !== newRole) {
+  //     await dispatch(updateUserRole({ userId: user._id || user.id, role: newRole }));
+  //   }
+  // };
 
   // Placeholder stats
   const totalSummaries = 12;

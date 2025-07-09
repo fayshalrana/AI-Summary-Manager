@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { fetchSummaries, deleteSummary, setCurrentSummary } from '../store/slices/summarySlice';
+import { fetchSummaries, deleteSummary } from '../store/slices/summarySlice';
 import type { Summary } from '../store/slices/summarySlice';
 import LoadingSpinner from "./LoadingSpinner.tsx";
 import SummaryDetail from './SummaryDetail';
@@ -60,14 +60,6 @@ const SummaryHistory = () => {
       hour: '2-digit',
       minute: '2-digit'
     });
-  };
-
-  const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
 
   if (loading) {

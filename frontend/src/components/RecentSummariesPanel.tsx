@@ -29,15 +29,15 @@ const RecentSummariesPanel: React.FC = () => {
     setSelectedSummary(summary);
   };
 
-  const canEdit = (summary: Summary) => {
-    if (!user) return false;
-    return (
-      user.role === 'admin' ||
-      user.role === 'editor' ||
-      user.id === (typeof summary.userId === 'string' ? summary.userId : summary.userId._id)
-    );
-  };
-  const canDelete = canEdit;
+  // const canEdit = (summary: Summary) => {
+  //   if (!user) return false;
+  //   return (
+  //     user.role === 'admin' ||
+  //     user.role === 'editor' ||
+  //     user.id === (typeof summary.userId === 'string' ? summary.userId : summary.userId._id)
+  //   );
+  // };
+  // const canDelete = canEdit;
 
   return (
     <div className="bg-white rounded-lg shadow p-6 mb-8">

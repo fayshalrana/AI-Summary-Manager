@@ -138,7 +138,7 @@ export const createSummaryFromText = createAsyncThunk(
       });
 
       // Refresh summaries list after creating new summary
-      dispatch(fetchSummaries());
+      dispatch(fetchSummaries({}));
 
       return response.data;
     } catch (error: any) {
@@ -175,7 +175,7 @@ export const createSummaryFromFile = createAsyncThunk(
       });
 
       // Refresh summaries list after creating new summary
-      dispatch(fetchSummaries());
+      dispatch(fetchSummaries({}));
 
       return response.data;
     } catch (error: any) {
@@ -207,7 +207,7 @@ export const updateSummary = createAsyncThunk(
       });
 
       // Refresh summaries list after updating
-      dispatch(fetchSummaries());
+      dispatch(fetchSummaries({}));
 
       return response.data;
     } catch (error: any) {
@@ -230,7 +230,7 @@ export const deleteSummary = createAsyncThunk(
       });
 
       // Refresh summaries list after deleting
-      dispatch(fetchSummaries());
+      dispatch(fetchSummaries({}));
 
       return summaryId;
     } catch (error: any) {

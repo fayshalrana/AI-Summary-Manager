@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { updateSummary, deleteSummary } from '../store/slices/summarySlice';
 import type { Summary } from '../store/slices/summarySlice';
-import LoadingSpinner from './LoadingSpinner';
+// import LoadingSpinner from './LoadingSpinner';
 
 interface SummaryDetailProps {
   summary: Summary;
@@ -14,7 +14,7 @@ interface SummaryDetailProps {
 const SummaryDetail = ({ summary, onClose, canEdit, canDelete }: SummaryDetailProps) => {
   const dispatch = useAppDispatch();
   const { loading, error } = useAppSelector(state => state.summary);
-  const { user } = useAppSelector(state => state.user);
+  // const { user } = useAppSelector(state => state.user);
 
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState({

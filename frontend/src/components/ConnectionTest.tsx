@@ -44,7 +44,7 @@ const ConnectionTest = () => {
       setMessage('Testing authentication endpoints...');
       
       // Test registration endpoint
-      const registerResponse = await axios.post(`${apiUrl}/auth/register`, {
+      await axios.post(`${apiUrl}/auth/register`, {
         name: 'Test User',
         email: 'test@example.com',
         password: 'testpassword123'
