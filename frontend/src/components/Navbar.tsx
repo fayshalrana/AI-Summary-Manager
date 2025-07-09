@@ -32,12 +32,14 @@ const Navbar: React.FC = () => {
           <span className="text-sm text-white/80">Welcome,</span>
           <span>{user?.name ?? '-'}</span>
         </div>
-        <button
-          onClick={handleLogout}
-          className="ml-4 px-4 py-1 bg-white/20 hover:bg-white/30 text-white rounded transition-colors text-base font-medium"
-        >
-          Logout
-        </button>
+        {user?.role !== 'admin' && (
+          <button
+            onClick={handleLogout}
+            className="ml-4 px-4 py-1 bg-white/20 hover:bg-white/30 text-white rounded transition-colors text-base font-medium"
+          >
+            Logout
+          </button>
+        )}
       </div>
     </nav>
   );

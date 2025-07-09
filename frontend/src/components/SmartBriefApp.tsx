@@ -7,7 +7,6 @@ import AuthForm from './AuthForm';
 import SummaryHistory from './SummaryHistory';
 import CreateSummary from './CreateSummary';
 import LoadingSpinner from './LoadingSpinner';
-import ConnectionTest from './ConnectionTest';
 
 const SmartBriefApp = () => {
   const dispatch = useAppDispatch();
@@ -41,7 +40,6 @@ const SmartBriefApp = () => {
               <h1 className="text-3xl font-bold text-gray-900 mb-2">SmartBrief</h1>
               <p className="text-gray-600">AI-Powered Text Summarization</p>
             </div>
-            <ConnectionTest />
             <div className="mt-8">
               <AuthForm />
             </div>

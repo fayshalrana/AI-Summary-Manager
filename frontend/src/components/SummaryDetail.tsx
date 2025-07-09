@@ -69,7 +69,7 @@ const SummaryDetail = ({ summary, onClose, canEdit, canDelete }: SummaryDetailPr
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto custom-scrollbar">
         {/* Header */}
         <div className="flex justify-between items-center p-6 border-b">
           <h2 className="text-2xl font-bold text-gray-900">
@@ -129,7 +129,7 @@ const SummaryDetail = ({ summary, onClose, canEdit, canDelete }: SummaryDetailPr
           {/* Original Text */}
           <div>
             <h3 className="font-semibold text-gray-900 mb-3">Original Text</h3>
-            <div className="bg-gray-50 p-4 rounded-lg max-h-40 overflow-y-auto">
+                            <div className="bg-gray-50 p-4 rounded-lg max-h-40 overflow-y-auto custom-scrollbar">
               <p className="text-sm text-gray-700 whitespace-pre-wrap">{summary.originalText}</p>
             </div>
           </div>
