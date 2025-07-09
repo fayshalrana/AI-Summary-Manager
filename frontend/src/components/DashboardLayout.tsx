@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useAppSelector, useAppDispatch } from '../store/hooks';
 import { getAllUsers, updateUserCredits, updateUserRole, clearJustRegistered } from '../store/slices/userSlice';
+import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
 import { fetchSummaries } from '../store/slices/summarySlice';
 import type { User } from '../store/slices/userSlice';
 import type { Summary } from '../store/slices/summarySlice';
@@ -11,7 +12,7 @@ import StatsGrid from './StatsGrid';
 import CreateSummaryPanel from './CreateSummaryPanel';
 import RecentSummariesPanel from './RecentSummariesPanel';
 import Sidebar from './Sidebar';
-import { HiX } from 'react-icons/hi';
+import { HiX} from 'react-icons/hi';
 
 const DashboardLayout: React.FC = () => {
   const { user, users, justRegistered } = useAppSelector(state => state.user);
@@ -24,6 +25,7 @@ const DashboardLayout: React.FC = () => {
   const [selectedSummary, setSelectedSummary] = useState<Summary | null>(null);
   const [creditValue, setCreditValue] = useState(0);
   const [roleValue, setRoleValue] = useState<'user' | 'editor' | 'reviewer'>('user');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const hasShownWelcome = useRef(false);
 
   // Show welcome notification when user has just registered
@@ -58,7 +60,6 @@ const DashboardLayout: React.FC = () => {
       dispatch(getAllUsers());
     }
   }, [user, dispatch]);
-
 
   // Initial fetch for dashboard stats
   useEffect(() => {
@@ -107,6 +108,13 @@ const DashboardLayout: React.FC = () => {
     }
   };
 
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
+  const closeSidebar = () => {
+    setSidebarOpen(false);
+  };
 
   // Calculate stats from actual data
   const totalSummaries = summaries?.length || 0;
@@ -135,11 +143,43 @@ const DashboardLayout: React.FC = () => {
   return (
     <div className="min-h-screen w-screen bg-gradient-to-b from-purple-100 to-blue-50 flex flex-col">
       <Navbar />
-      <div className="max-w-screen mx-auto w-full flex-1 flex">
+      <div className="max-w-screen mx-auto w-full flex-1 flex relative">
+        {/* Sidebar Toggle Button - Mobile */}
         {user?.role === 'admin' && (
-          <Sidebar onNavigate={setActiveSection} activeSection={activeSection} />
+          <button
+            onClick={toggleSidebar}
+            className={`lg:hidden fixed top-[70px] left-[32px] z-40 bg-white p-2 rounded-lg shadow-lg border border-gray-200 hover:bg-gray-50 transition-colors ${sidebarOpen ? 'left-[210px]' : ''}`}
+          >
+            {sidebarOpen ? <FaArrowLeft className="h-4 w-4 text-white" /> : <FaArrowRight className="h-4 w-4 text-white" />}
+          </button>
         )}
-        <div className={user?.role === 'admin' ? 'flex-1 pr-8 pl-[250px]' : 'flex-1 px-8'}>
+
+        {/* Sidebar */}
+        {user?.role === 'admin' && (
+          <>            
+            {/* Sidebar */}
+            <div className={`
+              ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+              lg:translate-x-0
+              fixed
+              top-[4rem] left-0 z-40
+              w-60 h-full
+              transition-transform duration-300 ease-in-out
+              lg:transition-none
+            `}>
+          <Sidebar onNavigate={setActiveSection} activeSection={activeSection} />
+            </div>
+          </>
+        )}
+
+        {/* Main Content */}
+        <div className={`
+          flex-1
+          px-4 md:px-8
+          ${user?.role === 'admin' ? 'lg:pl-0 lg:ml-64' : ''}
+          transition-all duration-300 ease-in-out
+          overflow-y-scroll
+        `}>
           <WelcomeHeader />
           <StatsGrid
             totalSummaries={totalSummaries}

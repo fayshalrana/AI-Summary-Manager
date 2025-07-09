@@ -5,8 +5,8 @@ const mammoth = require('mammoth');
 class FileService {
   /**
    * Extract text from uploaded file
-   * @param {Object} file - Uploaded file object
-   * @returns {Promise<Object>} - Extracted text and metadata
+   * @param {Object} file
+   * @returns {Promise<Object>}
    */
   async extractTextFromFile(file) {
     try {

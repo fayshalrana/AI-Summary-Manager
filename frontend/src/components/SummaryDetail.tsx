@@ -101,7 +101,7 @@ const SummaryDetail = ({ summary, onClose, canEdit, canDelete }: SummaryDetailPr
           </h2>
           <button
             onClick={onClose}
-            className="text-white hover:text-red-700 border-transparent bg-purple-50 hover:!bg-red-200 px-3 py-1 focus:outline-none transition-colors transition-transform duration-300 ease-in-out !border-2 hover:!border-red-800"
+            className="text-white hover:text-red-700 border-transparent bg-purple-50 hover:!bg-red-200 px-3 py-1 focus:outline-none transition-colors transition-transform duration-300 ease-in-out !border-2 hover:!border-red-800 !py-[10px] !px-[8px]"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

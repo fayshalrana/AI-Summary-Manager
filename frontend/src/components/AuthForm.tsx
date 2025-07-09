@@ -63,7 +63,7 @@ const AuthForm = () => {
   };
 
   return (
-    <div className="w-screen h-screen flex items-center justify-center bg-purple-100">
+    <div className="w-screen h-screen flex items-center justify-center bg-purple-100 px-[30px]">
      <div className="rounded-lg shadow-md p-6 bg-white shadow-lg">
       <div className="text-center mb-6">
         <h2 className="text-2xl font-bold text-gray-900">

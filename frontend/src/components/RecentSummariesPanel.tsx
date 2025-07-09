@@ -73,10 +73,10 @@ const RecentSummariesPanel: React.FC = () => {
         View All Summaries &rarr;
       </button>
       {showAllModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 px-4">
           <div className="bg-white rounded-lg shadow-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto custom-scrollbar p-6 relative">
             <button
-              className="absolute top-2 right-2 text-white hover:text-red-700 border-transparent bg-purple-50 hover:!bg-red-200 px-3 py-1 focus:outline-none transition-colors transition-transform duration-300 ease-in-out !border-2 hover:!border-red-800"
+              className="absolute top-5 right-2 text-white hover:text-red-700 border-transparent bg-purple-50 hover:!bg-red-200 px-3 py-1 focus:outline-none transition-colors transition-transform duration-300 ease-in-out !border-2 hover:!border-red-800"
               onClick={() => { setShowAllModal(false); setSelectedSummary(null); }}
               aria-label="Close"
             >
@@ -85,7 +85,7 @@ const RecentSummariesPanel: React.FC = () => {
             <h2 className="text-xl font-bold mb-4 text-black">All Summaries</h2>
             <ul>
               {summaries.map((summary) => (
-                <li
+                <li 
                   key={summary._id}
                   title='Click to View details'
                   className="mb-2 p-2 rounded hover:bg-gray-100 cursor-pointer flex justify-between items-center"

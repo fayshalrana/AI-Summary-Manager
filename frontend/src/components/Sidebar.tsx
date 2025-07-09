@@ -29,8 +29,8 @@ const Sidebar: React.FC<SidebarProps> = ({ onNavigate, activeSection }) => {
   };
 
   return (
-    <aside className="fixed left-0 top-16 z-40 bg-white dark:bg-gray-900 shadow-lg h-screen w-56 flex flex-col py-8 px-4">
-      <div className="flex flex-col gap-4 h-[90%]">
+    <aside className="fixed left-0 top-0 z-40 bg-white dark:bg-gray-900 shadow-lg h-[calc(100vh-4rem)] w-56 flex flex-col py-8 px-4 overflow-y-auto">
+      <div className="flex flex-col gap-4 h-full">
         {navItems.map(item => (
           <button
             key={item.section}
