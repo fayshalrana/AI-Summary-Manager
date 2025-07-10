@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { FaRegCreditCard, FaUser, FaSignOutAlt } from 'react-icons/fa';
-import { FaUserCircle } from "react-icons/fa";
+import { FaRegCreditCard, FaSignOutAlt } from 'react-icons/fa';
 import { useAppSelector, useAppDispatch } from '../store/hooks';
 import { logout } from '../store/slices/userSlice';
 import toast from 'react-hot-toast';

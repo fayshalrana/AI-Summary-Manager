@@ -112,10 +112,6 @@ const DashboardLayout: React.FC = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
-  const closeSidebar = () => {
-    setSidebarOpen(false);
-  };
-
   // Calculate stats from actual data
   const totalSummaries = summaries?.length || 0;
   const creditsRemaining = user?.role === 'admin' ? Infinity : user?.credits ?? 0;
