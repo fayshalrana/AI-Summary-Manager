@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 interface SidebarProps {
   onNavigate: (section: string) => void;
   activeSection: string;
+  onMobileNavigate?: () => void;
 }
 
 const navItems = [
@@ -20,12 +21,20 @@ const navItems = [
  * @param onNavigate - Handler for navigation item clicks
  * @param activeSection - Currently active section
  */
-const Sidebar: React.FC<SidebarProps> = ({ onNavigate, activeSection }) => {
+const Sidebar: React.FC<SidebarProps> = ({ onNavigate, activeSection, onMobileNavigate }) => {
   const dispatch = useAppDispatch();
 
   const handleLogout = () => {
     toast.success('Logged out successfully!');
     dispatch(logout());
+  };
+
+  const handleNavigation = (section: string) => {
+    onNavigate(section);
+    // Close sidebar on mobile after navigation
+    if (onMobileNavigate) {
+      onMobileNavigate();
+    }
   };
 
   return (
@@ -34,7 +43,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onNavigate, activeSection }) => {
         {navItems.map(item => (
           <button
             key={item.section}
-            onClick={() => onNavigate(item.section)}
+            onClick={() => handleNavigation(item.section)}
             className={`sideBar_btn flex items-center gap-3 px-4 py-2 rounded-lg text-lg font-medium transition-colors
               ${activeSection === item.section ? '!bg-white !text-purple-700 dark:text-blue-200' : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800'}`}
           >

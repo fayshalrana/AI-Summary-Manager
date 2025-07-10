@@ -112,6 +112,25 @@ const DashboardLayout: React.FC = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
+  const closeSidebar = () => {
+    setSidebarOpen(false);
+  };
+
+  const handleMobileNavigation = (section: string) => {
+    // Close sidebar on mobile
+    setSidebarOpen(false);
+    
+    // Scroll to section on mobile
+    if (window.innerWidth < 1024) {
+      setTimeout(() => {
+        const element = document.getElementById(section);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 300); // Wait for sidebar close animation
+    }
+  };
+
   // Calculate stats from actual data
   const totalSummaries = summaries?.length || 0;
   const creditsRemaining = user?.role === 'admin' ? Infinity : user?.credits ?? 0;
@@ -163,7 +182,14 @@ const DashboardLayout: React.FC = () => {
               transition-transform duration-300 ease-in-out
               lg:transition-none
             `}>
-          <Sidebar onNavigate={setActiveSection} activeSection={activeSection} />
+              <Sidebar 
+                onNavigate={(section) => {
+                  setActiveSection(section);
+                  handleMobileNavigation(section);
+                }} 
+                activeSection={activeSection} 
+                onMobileNavigate={() => closeSidebar()}
+              />
             </div>
           </>
         )}
@@ -194,7 +220,7 @@ const DashboardLayout: React.FC = () => {
               </div>
             </div>
           ) : activeSection === 'accounts' && user?.role === 'admin' ? (
-            <div className="bg-white rounded-lg shadow p-6">
+            <div id="accounts" className="bg-white rounded-lg shadow p-6">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-bold text-gray-900">User Management</h2>
                 <div className="text-sm text-gray-500">
@@ -278,7 +304,7 @@ const DashboardLayout: React.FC = () => {
               )}
             </div>
           ) : activeSection === 'history' ? (
-            <div className="bg-white rounded-lg shadow p-6">
+            <div id="history" className="bg-white rounded-lg shadow p-6">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-bold text-gray-900">Summary History</h2>
                 <div className="text-sm text-gray-500">
