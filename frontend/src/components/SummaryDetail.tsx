@@ -119,7 +119,7 @@ const SummaryDetail = ({ summary, onClose, canEdit, canDelete }: SummaryDetailPr
 
           {/* Metadata */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div className="bg-gray-50 p-4 rounded-lg">
+            <div className="bg-gray-100 p-4 rounded-lg">
               <h3 className="font-semibold text-gray-900 mb-2">Statistics</h3>
               <div className="space-y-1 text-sm">
                 <p className='text-black'><span className="font-medium">Original:</span> {summary.wordCount.original} words</p>
@@ -131,7 +131,7 @@ const SummaryDetail = ({ summary, onClose, canEdit, canDelete }: SummaryDetailPr
               </div>
             </div>
 
-            <div className="bg-gray-50 p-4 rounded-lg">
+            <div className="bg-gray-100 p-4 rounded-lg">
               <h3 className="font-semibold text-gray-900 mb-2">AI Information</h3>
               <div className="space-y-1 text-sm">
                 <p className='text-black'><span className="font-medium">Provider:</span> {summary.aiProvider}</p>
@@ -141,7 +141,7 @@ const SummaryDetail = ({ summary, onClose, canEdit, canDelete }: SummaryDetailPr
               </div>
             </div>
 
-            <div className="bg-gray-50 p-4 rounded-lg">
+            <div className="bg-gray-100 p-4 rounded-lg">
               <h3 className="font-semibold text-gray-900 mb-2">Timestamps</h3>
               <div className="space-y-1 text-sm">
                 <p className='text-black'><span className="font-medium">Created:</span> {formatDate(summary.createdAt)}</p>
@@ -153,7 +153,7 @@ const SummaryDetail = ({ summary, onClose, canEdit, canDelete }: SummaryDetailPr
           {/* Original Text */}
           <div>
             <h3 className="font-semibold text-gray-900 mb-3">Original Text</h3>
-                            <div className="bg-gray-50 p-4 rounded-lg border border-gray-300 max-h-40 overflow-y-auto custom-scrollbar">
+                            <div className="bg-gray-100 p-4 rounded-lg border border-gray-300 max-h-40 overflow-y-auto custom-scrollbar">
               <p className="text-sm text-gray-700 whitespace-pre-wrap">{summary.originalText}</p>
             </div>
           </div>
@@ -176,7 +176,7 @@ const SummaryDetail = ({ summary, onClose, canEdit, canDelete }: SummaryDetailPr
                 Copy
               </button>
             </div>
-            <div className="bg-blue-50 p-4 rounded-lg border border-gray-300">
+            <div className="bg-green-100 p-4 rounded-lg border border-gray-300">
               <p className="text-gray-800 whitespace-pre-wrap">{summary.summary}</p>
             </div>
           </div>

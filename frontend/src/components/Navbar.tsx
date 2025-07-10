@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { FaRegCreditCard, FaSignOutAlt } from 'react-icons/fa';
 import { useAppSelector, useAppDispatch } from '../store/hooks';
+import { FaUserNinja } from "react-icons/fa6";
 import { logout } from '../store/slices/userSlice';
 import toast from 'react-hot-toast';
 
@@ -59,9 +60,9 @@ const Navbar: React.FC = () => {
           {/* User Icon Button */}
           <button 
             onClick={toggleDropdown}
-            className="flex items-center justify-center w-10 h-10 !bg-white hover:!bg-purple-400 rounded-full transition-colors duration-200 !p-0 focus:outline-none focus:rign-0 border-none focus:shadow-none"
+            className="flex items-center justify-center w-10 h-10 !bg-white hover:!bg-black group rounded-full !p-0 focus:outline-none focus:rign-0 border-none focus:shadow-none transition-all duration-300 ease-in-out"
           >
-            <img src="/Snapchat.svg" alt="User Icon" className="w-7 h-7" />
+           <FaUserNinja className='text-black w-7 h-7 group-hover:text-white'/>
           </button>
 
           {/* Dropdown Menu */}
