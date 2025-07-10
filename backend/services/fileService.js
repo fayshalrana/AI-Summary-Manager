@@ -57,8 +57,8 @@ class FileService {
 
   /**
    * Extract text from .txt file
-   * @param {Object} file - Uploaded file object
-   * @returns {Promise<string>} - Extracted text
+   * @param {Object} file 
+   * @returns {Promise<string>} 
    */
   async extractFromTxt(file) {
     try {
@@ -71,8 +71,8 @@ class FileService {
 
   /**
    * Extract text from .docx file
-   * @param {Object} file - Uploaded file object
-   * @returns {Promise<string>} - Extracted text
+   * @param {Object} file 
+   * @returns {Promise<string>} 
    */
   async extractFromDocx(file) {
     try {
@@ -85,8 +85,8 @@ class FileService {
 
   /**
    * Validate extracted text
-   * @param {string} text - Extracted text
-   * @returns {Object} - Validation result
+   * @param {string} text 
+   * @returns {Object} 
    */
   validateExtractedText(text) {
     if (!text || typeof text !== 'string') {
@@ -112,7 +112,7 @@ class FileService {
 
   /**
    * Get supported file types
-   * @returns {Array} - Supported file types
+   * @returns {Array} 
    */
   getSupportedFileTypes() {
     return [
@@ -133,8 +133,8 @@ class FileService {
 
   /**
    * Validate file before processing
-   * @param {Object} file - Uploaded file object
-   * @returns {Object} - Validation result
+   * @param {Object} file 
+   * @returns {Object} 
    */
   validateFile(file) {
     if (!file) {
@@ -166,17 +166,17 @@ class FileService {
 
   /**
    * Clean and normalize text
-   * @param {string} text - Raw text
-   * @returns {string} - Cleaned text
+   * @param {string} text 
+   * @returns {string} 
    */
   cleanText(text) {
     if (!text) return '';
 
     return text
-      .replace(/\r\n/g, '\n') // Normalize line endings
-      .replace(/\r/g, '\n')   // Convert remaining carriage returns
-      .replace(/\n{3,}/g, '\n\n') // Remove excessive line breaks
-      .replace(/\s+/g, ' ')   // Normalize whitespace
+      .replace(/\r\n/g, '\n') 
+      .replace(/\r/g, '\n')   
+      .replace(/\n{3,}/g, '\n\n') 
+      .replace(/\s+/g, ' ')   
       .trim();
   }
 }

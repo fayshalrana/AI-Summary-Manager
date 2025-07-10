@@ -48,7 +48,7 @@ class AIService {
           params: {
             key: this.geminiApiKey
           },
-          timeout: 30000 // 30 seconds timeout
+          timeout: 30000 
         }
       );
 
@@ -73,10 +73,10 @@ class AIService {
 
   /**
    * Generate summary (Gemini only)
-   * @param {string} text - Text to summarize
-   * @param {string} prompt - Custom prompt for summarization
-   * @param {string} model - Model to use
-   * @returns {Promise<Object>} - Summary result
+   * @param {string} text 
+   * @param {string} prompt 
+   * @param {string} model 
+   * @returns {Promise<Object>}
    */
   async generateSummary(text, prompt = null, model = null) {
     const startTime = Date.now();
@@ -102,9 +102,10 @@ class AIService {
 
   /**
    * Validate text for summarization
-   * @param {string} text - Text to validate
-   * @returns {Object} - Validation result
+   * @param {string} text 
+   * @returns {Object} 
    */
+
   validateText(text) {
     if (!text || typeof text !== 'string') {
       return { valid: false, error: 'Text must be a non-empty string' };
@@ -125,7 +126,7 @@ class AIService {
 
   /**
    * Get available models (Gemini only)
-   * @returns {Object} - Available models
+   * @returns {Object} 
    */
   getAvailableModels() {
     return {
@@ -138,7 +139,7 @@ class AIService {
 
   /**
    * Check API configuration (Gemini only)
-   * @returns {Object} - Configuration status
+   * @returns {Object} 
    */
   checkConfiguration() {
     return {

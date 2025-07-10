@@ -3,9 +3,8 @@ const User = require('../models/User');
 class CreditService {
   /**
    * Check if user has sufficient credits
-   * @param {string} userId - User ID
-   * @param {number} requiredCredits - Number of credits required (default: 1)
-   * @returns {Promise<boolean>} - True if user has sufficient credits
+   * @param {string} userId 
+   * @param {number} requiredCredits
    */
   static async hasSufficientCredits(userId, requiredCredits = 1) {
     try {
@@ -22,9 +21,9 @@ class CreditService {
 
   /**
    * Deduct credits from user account
-   * @param {string} userId - User ID
-   * @param {number} creditsToDeduct - Number of credits to deduct (default: 1)
-   * @returns {Promise<Object>} - Updated user object with remaining credits
+   * @param {string} userId 
+   * @param {number} creditsToDeduct 
+   * @returns {Promise<Object>} 
    */
   static async deductCredits(userId, creditsToDeduct = 1) {
     try {
@@ -53,9 +52,9 @@ class CreditService {
 
   /**
    * Add credits to user account
-   * @param {string} userId - User ID
-   * @param {number} creditsToAdd - Number of credits to add
-   * @returns {Promise<Object>} - Updated user object with new credit balance
+   * @param {string} userId 
+   * @param {number} creditsToAdd 
+   * @returns {Promise<Object>} 
    */
   static async addCredits(userId, creditsToAdd) {
     try {
@@ -84,8 +83,8 @@ class CreditService {
 
   /**
    * Get user's current credit balance
-   * @param {string} userId - User ID
-   * @returns {Promise<number>} - Current credit balance
+   * @param {string} userId 
+   * @returns {Promise<number>} 
    */
   static async getCreditBalance(userId) {
     try {
@@ -102,9 +101,9 @@ class CreditService {
 
   /**
    * Process summarization with credit deduction
-   * @param {string} userId - User ID
-   * @param {Function} summarizationFunction - Function that performs summarization
-   * @returns {Promise<Object>} - Result of summarization with credit info
+   * @param {string} userId 
+   * @param {Function} summarizationFunction 
+   * @returns {Promise<Object>} 
    */
   static async processWithCredits(userId, summarizationFunction) {
     try {

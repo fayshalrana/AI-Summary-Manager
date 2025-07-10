@@ -156,8 +156,6 @@ router.get('/me', authenticateToken, async (req, res) => {
 
 // POST /api/auth/logout
 router.post('/logout', (req, res) => {
-  // For JWT, logout is handled client-side by deleting the token.
-  // Optionally, you could implement token blacklisting here.
   res.json({ message: 'Logout successful' });
 });
 
