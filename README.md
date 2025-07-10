@@ -15,7 +15,6 @@ SmartBrief is a modern web application that leverages Google's Gemini AI to prov
 ### User Management
 - **Role-Based Access**: User, Editor, Reviewer, and Admin roles
 - **Credit System**: Manage usage with a credit-based system
-- **User Dashboard**: Personal summary history and statistics
 - **Admin Panel**: Complete user management and system oversight
 - **Role-Based Summary Management**: Different access levels for summary viewing and management
 - **Admin Credit Management**: Admins can add/remove credits for any user
@@ -23,10 +22,7 @@ SmartBrief is a modern web application that leverages Google's Gemini AI to prov
 
 ### Advanced Features
 - **Responsive Design**: Works seamlessly on desktop and mobile devices
-- **Dark/Light Mode**: Toggle between themes
 - **Real-time Notifications**: Toast notifications for user feedback
-- **Export Capabilities**: Download summaries in various formats
-- **Search & Filter**: Find specific summaries quickly
 - **Analytics Dashboard**: Track usage patterns and performance metrics
 
 ## 🛠️ Tech Stack
@@ -54,7 +50,6 @@ SmartBrief is a modern web application that leverages Google's Gemini AI to prov
 ### AI Integration
 - **Google Gemini AI** - Primary AI provider for text summarization
 - **Custom Prompt Engineering** - Tailored summarization prompts
-- **Model Selection** - Support for different Gemini models
 - **Usage Tracking** - Monitor API usage and costs
 
 ### DevOps & Deployment
@@ -200,7 +195,6 @@ smartBrief/
 
 #### AI Service (`services/aiService.js`)
 - Handles Google Gemini API integration
-- Manages different model configurations
 - Provides text validation and processing
 - Tracks API usage and costs
 
@@ -361,25 +355,17 @@ const supportedTypes = fileService.getSupportedFileTypes();
 - **Global Summary View**: Access all summaries across users
 - **Summary Status Management**: Approve, reject, or flag summaries
 - **Content Moderation**: Review and edit summary content
-- **Bulk Actions**: Delete or modify multiple summaries
 
 #### System Administration
 - **Credit System Control**: Configure credit costs and limits
 - **Role Permissions**: Customize role-based access
 - **System Health**: Monitor API usage and performance
-- **Audit Logs**: Track user actions and system changes
 
 ### System Metrics
 - API response times
 - Error rates
 - Database performance
 - AI service usage
-
-### Dashboard Features
-- Real-time statistics
-- User activity tracking
-- System health monitoring
-- Performance insights
 
 ## 🚀 Deployment
 
@@ -531,25 +517,6 @@ Content-Type: application/json
   "notes": "Summary meets quality standards"
 }
 ```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🆘 Support
-
-For support and questions:
-- Create an issue in the GitHub repository
-- Contact the development team
-- Check the documentation wiki
 
 ## 🔄 Version History
 
